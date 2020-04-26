@@ -69,7 +69,7 @@ public:
 	* @see #HandleMouse(int, int, int, int)
 	*/
 	void HandleMouseDrag(int x, int y);
-	void HandleMouseMove(int x, int y){}; // unused at preset
+	void HandleMouseMove(int x, int y) {}; // unused at preset
 
 	/**
 	* Called by {@link Scene} to position camera.

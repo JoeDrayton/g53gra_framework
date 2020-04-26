@@ -1,6 +1,10 @@
 #pragma once
 
 #include "../Framework/Engine/Scene.h"
+#include "Skybox.h"
+#include "TestObject.h"
+#include "Terrain.h"
+#include "Vertex.h"
 
 class MyScene :
 	public Scene

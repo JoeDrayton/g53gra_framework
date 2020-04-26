@@ -11,7 +11,8 @@ void Camera::Reset(){
 	// set the camera position to start at (0,0,0)
 	eyePosition[0] = 0.0f;
 	eyePosition[1] = 0.0f;
-	eyePosition[2] = 0.5f * static_cast<float>(Scene::GetWindowHeight()) / static_cast<float>(tan(M_PI / 6.0));//0.0f;
+	eyePosition[2] = 10.0f;
+		//0.5f * static_cast<float>(Scene::GetWindowHeight()) / static_cast<float>(tan(M_PI / 6.0));//0.0f;
 
 	// set the view direction vector of the camera to be (0,0,-1)
 	vd[0] = 0.0f;
@@ -50,21 +51,37 @@ void Camera::SetupCamera()
 }
 
 void Camera::Update(const double& deltaTime)
-{
+{	
+	float temp[3];
+	for (int i = 0; i < 3; i++) {
+		temp[i] = eyePosition[i];
+	}
+
 	float speed = 1.0f;
 
-	if (aKey)
-		sub(eyePosition, right, speed);
+	if (aKey) {
+		sub(temp, right, speed);
+		if ((temp[0] < 990 && temp[0] > -990) && (temp[2] < 990 && temp[2] > -990))
+			sub(eyePosition, right, speed);
+	}
 
-	if (dKey)
-		add(eyePosition, right, speed);
+	if (dKey) {
+		add(temp, right, speed);
+		if ((temp[0] < 990 && temp[0] > -990) && (temp[2] < 990 && temp[2] > -990))
+			add(eyePosition, right, speed);
+	}
 
-	if (wKey)
-		add(eyePosition, forward, speed);
+	if (wKey) {
+		add(temp, forward, speed);
+		if ((temp[0] < 990 && temp[0] > -990) && (temp[2] < 990 && temp[2] > -990))
+			add(eyePosition, forward, speed);
+	}
 
-	if (sKey)
-		sub(eyePosition, forward, speed);
-
+	if (sKey) {
+		sub(temp, forward, speed);
+		if ((temp[0] < 990 && temp[0] > -990) && (temp[2] < 990 && temp[2] > -990))
+			sub(eyePosition, forward, speed);
+	}
 	SetupCamera();
 }
 
@@ -150,40 +167,40 @@ void Camera::HandleMouseDrag(int x, int y)
 	// switch on which button was pressed and only do the update if the left button was pressed
 	switch (currentButton)
 	{
-		case GLUT_LEFT_BUTTON:
+	case GLUT_LEFT_BUTTON:
 
-			// add on the amount of change in to the left and right view direction of the camera
-			if (rx > 0)
-				add(vd, right, rx*sensitivity);
-			else
-				sub(vd, right, rx*-sensitivity);
-			// add on the amount of change in to the up and down view direction of the camera
-			if (ry > 0)
-				sub(vd, up, ry*sensitivity);
-			else
-				add(vd, up, ry*-sensitivity);
+		// add on the amount of change in to the left and right view direction of the camera
+		if (rx > 0)
+			add(vd, right, rx * sensitivity);
+		else
+			sub(vd, right, rx * -sensitivity);
+		// add on the amount of change in to the up and down view direction of the camera
+		if (ry > 0)
+			sub(vd, up, ry * sensitivity);
+		else
+			add(vd, up, ry * -sensitivity);
 
-			// normalise the view direction so it is length 1
-			norm(vd);
+		// normalise the view direction so it is length 1
+		norm(vd);
 
-			// use the view direction crossed with the up vector to obtain the corrected right vector
-			cross(vd, up, right);
+		// use the view direction crossed with the up vector to obtain the corrected right vector
+		cross(vd, up, right);
 
-			// normalise the right vector
-			norm(right);
+		// normalise the right vector
+		norm(right);
 
-			/* As we want out camera to stay on the same plane at the same height (i.e. not move up and down the y axis) update a forward direction vector which can be used to move the camera. This forward vector moves the camera in the same direction as the view direction except it will not contain any y component so it cannot move off of its original height. This was we are free to look up and down however moving forward and back will not move us off of the camera plane. */
+		/* As we want out camera to stay on the same plane at the same height (i.e. not move up and down the y axis) update a forward direction vector which can be used to move the camera. This forward vector moves the camera in the same direction as the view direction except it will not contain any y component so it cannot move off of its original height. This was we are free to look up and down however moving forward and back will not move us off of the camera plane. */
 
-			forward[0] = vd[0];
-			forward[2] = vd[2];
-			norm(forward);
-			break;
-		case GLUT_RIGHT_BUTTON:
-			break;
-		case GLUT_MIDDLE_BUTTON:
-			break;
-		default:
-			break;
+		forward[0] = vd[0];
+		forward[2] = vd[2];
+		norm(forward);
+		break;
+	case GLUT_RIGHT_BUTTON:
+		break;
+	case GLUT_MIDDLE_BUTTON:
+		break;
+	default:
+		break;
 	}
 
 	mouseX = x;
