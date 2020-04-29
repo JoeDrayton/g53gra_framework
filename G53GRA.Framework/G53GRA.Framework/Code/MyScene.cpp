@@ -70,7 +70,7 @@ void MyScene::Initialise()
 	skybox[3] = Scene::GetTexture("./Textures/skybox-back.bmp");
 	skybox[4] = Scene::GetTexture("./Textures/skybox-top.bmp");
 
-	Terrain* terrain = new Terrain(1000, 1000, "./Textures/groundTexture.bmp");
+	Terrain* terrain = new Terrain(100, 100, "./Textures/groundTexture.bmp");
 
 	sb->setTextures(skybox);
 	AddObjectToScene(sb);
