@@ -3,31 +3,33 @@
 #include <fstream>
 #include <assert.h>
 Terrain::Terrain(int width, int depth, const std::string& filename)
-:width(width),depth(depth),size(width* (depth - 1) * 2)
+	:width(width), depth(depth), size(width* (depth - 1) * 2)
 {
 	texID = Scene::GetTexture(filename);
 	vertices = createVertices();
-	indices = generateIndices();
+	indices = createIndices();
+	alterTerrain("./Textures/heightMap.bmp");
+	//alterTerrain("./Textures/heightMap4x4.bmp");
 	colours = colorPoint();
-	alterTerrain(0, 0, 0, "./Textures/heightMap.bmp");
+	normals = createNormals();
+	textureCoords = textureCoordinate();
+	/*textureCoords = new GLfloat[size * 6]{
+		1,0, 0,0, 1,0, 1,1, 1,0, 0,1,
+		1,0, 0,0, 1,0, 1,1, 1,0, 0,1,
+		1,0, 0,0, 1,0, 1,1, 1,0, 0,1
+	};*/
 }
 
-void Terrain::alterTerrain(float min, float max, float rate, const std::string& heightMap) {
+void Terrain::alterTerrain(const std::string& heightMap) {
 	std::ifstream file(heightMap, std::ios::binary);
 	BITMAPFILEHEADER bmpHeader;
 	file.read(reinterpret_cast<char*>(&bmpHeader), sizeof(bmpHeader));
-	printf("I hate it all \n");
-
 	BITMAPINFOHEADER bmpInfoHeader;
 	file.read(reinterpret_cast<char*>(&bmpInfoHeader), sizeof(bmpInfoHeader));
 	assert(bmpInfoHeader.biBitCount == 24);
-	//assert(bmpInfoHeader.biCompression = BI_RGB);
-
 	int w = bmpInfoHeader.biWidth;
 	int h = bmpInfoHeader.biHeight;
-
 	file.seekg(bmpHeader.bfOffBits);
-
 	const int padding = (4 - (w * 3) % 4) % 4;
 	int vertexHeight;
 	int i = 0;
@@ -36,114 +38,291 @@ void Terrain::alterTerrain(float min, float max, float rate, const std::string& 
 			vertexHeight = file.get();
 			file.get();
 			file.get();
-			vertices[i++]->position[1] = (float)vertexHeight/150;
+			vertices[i++]->position[1] = (float)vertexHeight / 255;
 		}
 		file.seekg(padding, std::ios::cur);
 	}
 }
 
-GLfloat* Terrain::colorPoint(){
-	 GLfloat* colorPoint = new GLfloat[width * depth * 3];
-	int i = 0;
-	for (int col = 0; col < width; col++) {
-		for (int row = 0; row < depth; row++) {
-			float random = (float)std::rand() / (float)RAND_MAX;
-			colorPoint[i++] = random;
-			random = (float)std::rand() / (float)RAND_MAX;
-			colorPoint[i++] = random;
-			random = (float)std::rand() / (float)RAND_MAX;
-			colorPoint[i++] = random;
+GLfloat* Terrain::colorPoint() {
+	GLfloat* colorPoint = new GLfloat[width * depth * 3];
+	int j = 0;
+	for (int i = 0; i < width * depth; i++) {
+		float vertexHeight = vertices[i]->position[1];
+		//std::cout << vertexHeight << std::endl;
+		if (vertexHeight <= 0.60) {
+			colorPoint[j++] = (float)89 / 255;
+			colorPoint[j++] = (float)68 / 255;
+			colorPoint[j++] = (float)48 / 255;
+		}
+		else if (vertexHeight <= 0.64) {
+			colorPoint[j++] = (float)89 / 255;
+			colorPoint[j++] = (float)68 / 255;
+			colorPoint[j++] = (float)48 / 255;
+		}
+		else if (vertexHeight <= 0.69) {
+			colorPoint[j++] = (float)98 / 255;
+			colorPoint[j++] = (float)77 / 255;
+			colorPoint[j++] = (float)62 / 255;
+		}
+		else if (vertexHeight <= 0.74) {
+			colorPoint[j++] = (float)126 / 255;
+			colorPoint[j++] = (float)101 / 255;
+			colorPoint[j++] = (float)88 / 255;
+		}
+		else if (vertexHeight <= 0.78) {
+			colorPoint[j++] = (float)130 / 255;
+			colorPoint[j++] = (float)100 / 255;
+			colorPoint[j++] = (float)81 / 255;
+		}
+		else if (vertexHeight <= 0.80) {
+			colorPoint[j++] = (float)135 / 255;
+			colorPoint[j++] = (float)100 / 255;
+			colorPoint[j++] = (float)90 / 255;
+		}
+		else if (vertexHeight <= 0.85) {
+			colorPoint[j++] = (float)129 / 255;
+			colorPoint[j++] = (float)108 / 255;
+			colorPoint[j++] = (float)83 / 255;
+		}
+		else if (vertexHeight <= 0.89) {
+			colorPoint[j++] = (float)133 / 255;
+			colorPoint[j++] = (float)112 / 255;
+			colorPoint[j++] = (float)91 / 255;
+		}
+		else {
+			colorPoint[j++] = (float)131 / 255;
+			colorPoint[j++] = (float)109 / 255;
+			colorPoint[j++] = (float)89 / 255;
 		}
 	}
 	return colorPoint;
 }
 
-GLfloat* Terrain::generateVertices() { 
-	GLfloat* vertices = new GLfloat[width * depth * 3];
+GLint** Terrain::createIndices() {
+	GLint** indices = new GLint*[depth - 1];
+	int i = 0;
+	int j = 0;
+	for (int column = 0; column < depth - 1; column++) {
+		GLint* entry = new GLint[width * 2];
+		for (int row = 0; row < width; row++) {
+			entry[i++] = row + (column * depth);
+			entry[i++] = row + ((column + 1) * depth);
+		}
+		//std::cout << "New entry " << j << " added!" << std::endl;
+		for (int k = 0; k < width * 2; k++) {
+			//std::cout << entry[k] << ", ";
+		}
+		i = 0;
+		indices[j++] = entry;
+		std::cout << std::endl;
+	}
+		//delete[] entry;
+	return indices;
+}
+GLfloat* Terrain::normalise(GLfloat x, GLfloat y, GLfloat z) {
+	GLfloat length = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+	GLfloat normal[3] = {
+		x / length,
+		y / length,
+		z / length
+	};
+	return normal;
+}
+
+GLfloat** Terrain::createNormals()
+{
+	GLfloat** norms = new GLfloat*[width * depth * 3];
 	int i = 0;
 	for (int row = 0; row < width; row++) {
 		for (int column = 0; column < depth; column++) {
-			vertices[i++] = (float) column;
-			vertices[i++] = 0.f;
-			vertices[i++] = (float)row;
+			int numNeighbours = 0;
+			int index = column + (row * depth);
+			Vertex* current = vertices[index];
+			//std::cout << "Position: " << current->position[0] << ", " << current->position[1] << ", " << current->position[2] << std::endl;
+			Vertex* up = vertices[(column)+((row + 1) * depth)];
+			Vertex* right = vertices[(column + 1) + (row * depth)];
+			Vertex* downRight = vertices[(column + 1) + ((row - 1) * depth)];
+			Vertex* down = vertices[column + ((row - 1) * depth)];
+			Vertex* left = vertices[(column - 1) + (row * depth)];
+			Vertex* leftUp = vertices[(column - 1) + ((row + 1) * depth)];
+			GLfloat* N1 = new GLfloat[3];
+			GLfloat* N2 = new GLfloat[3];
+			GLfloat* N3 = new GLfloat[3];
+			GLfloat* N4 = new GLfloat[3];
+			GLfloat* N5 = new GLfloat[3];
+			GLfloat* N6 = new GLfloat[3];
+			GLfloat* N = new GLfloat[3];
+			if (column == 0) {
+				if (row == 0) {
+					N = right->crossProduct(up->position);
+					N = normalise(N[0],N[1],N[2]);
+					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
+				}
+				else if (row == (depth - 1)) {
+					N1 = down->crossProduct(downRight->position);
+					N2 = downRight->crossProduct(right->position);
+					N[0] = N1[0] + N2[0];
+					N[1] = N1[1] + N2[1];
+					N[2] = N1[2] + N2[2];
+					N = normalise(N[0], N[1], N[2]);
+					//::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
+				}
+				else {
+					N1 = down->crossProduct(downRight->position);
+					N2 = downRight->crossProduct(right->position);
+					N3 = right->crossProduct(up->position);
+					N[0] = N1[0] + N2[0] + N3[0];
+					N[1] = N1[1] + N2[1] + N3[1];
+					N[2] = N1[2] + N2[2] + N3[2];
+					N = normalise(N[0], N[1], N[2]);
+					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
+				}
+			}
+			else if (column == (width - 1)) {
+				if (row == 0) {
+					N1 = up->crossProduct(leftUp->position);
+					N2 = leftUp->crossProduct(left->position);
+					N[0] = N1[0] + N2[0];
+					N[1] = N1[1] + N2[1];
+					N[2] = N1[2] + N2[2];
+					N = normalise(N[0], N[1], N[2]);
+					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
+				}
+				else if (row == (depth - 1)) {
+					N = left->crossProduct(down->position);
+					N = normalise(N[0], N[1], N[2]);
+					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
+				}
+				else {
+					N1 = up->crossProduct(leftUp->position);
+					N2 = leftUp->crossProduct(left->position);
+					N3 = left->crossProduct(down->position);
+					N[0] = N1[0] + N2[0] + N3[0];
+					N[1] = N1[1] + N2[1] + N3[1];
+					N[2] = N1[2] + N2[2] + N3[2];
+					N = normalise(N[0], N[1], N[2]);
+					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
+				}
+			}
+			else if (row == 0) {
+				N1 = up->crossProduct(leftUp->position);
+				N2 = leftUp->crossProduct(left->position);
+				N3 = right->crossProduct(up->position);
+				N[0] = N1[0] + N2[0] + N3[0];
+				N[1] = N1[1] + N2[1] + N3[1];
+				N[2] = N1[2] + N2[2] + N3[2];
+				N = normalise(N[0], N[1], N[2]);
+				//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
+			}
+			else if (row == (depth - 1)) {
+				N1 = left->crossProduct(down->position);
+				N2 = down->crossProduct(downRight->position);
+				N3 = downRight->crossProduct(right->position);
+				N[0] = N1[0] + N2[0] + N3[0];
+				N[1] = N1[1] + N2[1] + N3[1];
+				N[2] = N1[2] + N2[2] + N3[2];
+				N = normalise(N[0], N[1], N[2]);
+				//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
+			}
+			else {
+				N1 = up->crossProduct(leftUp->position);
+				N2 = leftUp->crossProduct(left->position);
+				N3 = left->crossProduct(down->position);
+				N4 = down->crossProduct(downRight->position);
+				N5 = downRight->crossProduct(right->position);
+				N6 = right->crossProduct(up->position);
+
+				N[0] = N1[0] + N2[0] + N3[0] + N4[0] + N5[0] + N6[0];
+				N[1] = N1[1] + N2[1] + N3[1] + N4[1] + N5[1] + N6[1];
+				N[2] = N1[2] + N2[2] + N3[2] + N4[2] + N5[2] + N6[2];
+				N = normalise(N[0], N[1], N[2]);
+				//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
+			}
+			norms[i] = N;
 		}
 	}
-	return vertices;
+	return norms;
 }
 
-
-GLint* Terrain::generateIndices() {
-	GLint* indices = new GLint[size];
-	int i = 0;
-	for (int column = 0; column < depth - 1; column++) {
-		for (int row = 0; row < width; row++) {
-			indices[i++] = row + (column * depth);
-			indices[i++] = row + ((column + 1) * depth);
+GLfloat* Terrain::textureCoordinate() {
+	GLfloat* texCoords = new GLfloat[width * depth * 6];
+	int j = 0;
+	for (int i = 0; i < width * depth; i++) {
+		if (i % 2 == 0) {
+			texCoords[j++] = 0;
+			texCoords[j++] = 0;
+			texCoords[j++] = 1;
+			texCoords[j++] = 0;
+			texCoords[j++] = 0;
+			texCoords[j++] = 1;
 		}
-		
+		else {
+			texCoords[j++] = 1;
+			texCoords[j++] = 0;
+			texCoords[j++] = 0;
+			texCoords[j++] = 1;
+			texCoords[j++] = 1;
+			texCoords[j++] = 1;
+		}
 	}
-	return indices;
+	return texCoords;
 }
 
 Vertex** Terrain::createVertices() {
-	Vertex** vertices = new Vertex*[width * depth];
+	Vertex** vertices = new Vertex * [width * depth];
 	int i = 0;
 	for (int row = 0; row < width; row++) {
 		for (int column = 0; column < depth; column++) {
 			Vertex* vertex = new Vertex((float)column, 0.f, (float)row);
+			vertex->defined = true;
 			vertices[i++] = vertex;
 		}
-	}/*
-	for (i = 0; i < width* depth; i++) {
-		std::cout << "Bullshit: " << vertices[i]->position[0] << ", " << vertices[i]->position[1] << ", " << vertices[i]->position[2] << std::endl;
 	}
-	 */
 	return vertices;
 }
 
 void Terrain::Display() {
 	glPushMatrix();
-	glTranslatef(-1000.f, -1550.f, -1000.f);
-	glScalef(2000.f / (width - 1), 1000.f, 2000.f/(depth - 1));
+	glTranslatef(-1000.f, -800, -1000.f);
+	//glTranslatef(-1000.f, -1000, -1000.f);
+	glScalef(2000.f / (width - 1), 1000.f, 2000.f / (depth - 1));
 	DrawTerrain();
 	glPopMatrix();
 }
 
-
-
 void Terrain::DrawTerrain() {
-	GLfloat texCoords[] = {
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f,
-		0.0f, 1.0f
-	};
-
-
-	//glColor3f(0.5f, 0.3f, 0.18f);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_TEXTURE_2D);
 	glEnableClientState(GL_COLOR_ARRAY);
 	GLfloat* secretSauce = new GLfloat[width * depth * 3];
 	int i = 0;
 	for (int j = 0; j < width * depth; j++) {
-			secretSauce[i++] = vertices[j]->position[0];
-			secretSauce[i++] = vertices[j]->position[1];
-			secretSauce[i++] = vertices[j]->position[2];
+		secretSauce[i++] = vertices[j]->position[0];
+		secretSauce[i++] = vertices[j]->position[1];
+		secretSauce[i++] = vertices[j]->position[2];
 	}
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
-	glVertexPointer(3, GL_FLOAT, 0, secretSauce);
 	glColorPointer(3, GL_FLOAT, 0, colours);
-	glColor3f(0.5f, 0.2f, 0.3f);
-	glDrawElements(GL_TRIANGLE_STRIP, size, GL_UNSIGNED_INT, indices);
-	//glDrawArrays(GL_TRIANGLE_STRIP, indices[0], size);
+	glNormalPointer(GL_FLOAT, 0, normals);
+	glVertexPointer(3, GL_FLOAT, 0, secretSauce);
+	glBindTexture(GL_TEXTURE_2D, texID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
+	
+	glColor3f(0.5f, 0.3f, 0.15f);
+	for (int j = 0; j < depth - 1; j++) {
+		glDrawElements(GL_TRIANGLE_STRIP, width * 2, GL_UNSIGNED_INT, indices[j]);
+	}
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	delete secretSauce;
-
-	glBindTexture(GL_TEXTURE_2D, NULL);
-	// Stop performing texturing
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
+	delete []secretSauce;
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
-

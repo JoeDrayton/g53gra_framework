@@ -12,7 +12,7 @@ void MyScene::Initialise()
 
 	
 	//Light 0
-	GLfloat ambience[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	GLfloat ambience[] = { 1.f, 1.f, 1.f, 1.0f };
 	GLfloat diffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	GLfloat specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 
@@ -39,7 +39,7 @@ void MyScene::Initialise()
 	glLightfv(GL_LIGHT3, GL_DIFFUSE, bl);
 	glLightfv(GL_LIGHT3, GL_SPECULAR, bl);
 
-	//glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT0);
 	//glEnable(GL_LIGHT1);
 	//glEnable(GL_LIGHT2);
 	//glEnable(GL_LIGHT3);

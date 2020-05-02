@@ -8,18 +8,22 @@ class Terrain:
 {
 public:
 	Terrain(int width, int depth, const std::string& filename);
-	void alterTerrain(float min, float max, float rate, const std::string& heightMap);
+	void alterTerrain(const std::string& heightMap);
 	GLfloat* colorPoint();
 	~Terrain() {};
-	GLfloat* generateVertices();
-	GLint* generateIndices();
+	GLint** createIndices();
+	GLfloat* normalise(GLfloat x, GLfloat y, GLfloat z);
+	GLfloat** createNormals();
+	GLfloat* textureCoordinate();
 	Vertex** createVertices();
 	void Display();
-	int width;
-	int depth;
-	GLint* indices;
+	const int width;
+	const int depth;
+	GLint** indices;
 	Vertex** vertices;
+	GLfloat** normals;
 	GLfloat* colours;
+	GLfloat* textureCoords;
 	const int size;
 	char* heightMap;
 private:
