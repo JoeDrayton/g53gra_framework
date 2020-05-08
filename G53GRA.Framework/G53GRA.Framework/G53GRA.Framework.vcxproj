@@ -10,18 +10,21 @@
     <ClCompile Include="Code\main.cpp" />
     <ClCompile Include="Code\MyScene.cpp" />
     <ClCompile Include="Code\Vertex.cpp" />
+    <ClCompile Include="Code\Eye.cpp" />
     <ClCompile Include="Framework\Engine\Engine.cpp" />
     <ClCompile Include="Framework\Engine\Scene.cpp" />
     <ClCompile Include="Framework\Utility\Camera.cpp" />
     <ClCompile Include="Framework\Utility\Texture.cpp" />
     <ClCompile Include="Code\Skybox.cpp" />
     <ClCompile Include="Code\TestObject.cpp" />
-    <ClCompile Include="Code\TexturedQuad.cpp" />
+    <ClCompile Include="Code\Door.cpp" />
     <ClCompile Include="Code\Terrain.cpp" />
+    <ClCompile Include="Code\RainbowTerrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Vertex.h" />
     <ClInclude Include="Code\MyScene.h" />
+    <ClInclude Include="Code\Eye.h" />
     <ClInclude Include="Framework\Engine\Engine.h" />
     <ClInclude Include="Framework\Engine\Scene.h" />
     <ClInclude Include="Framework\Interface\Animation.h" />
@@ -32,8 +35,9 @@
     <ClInclude Include="Framework\Utility\VectorMath.h" />
     <ClInclude Include="Code\Skybox.h" />
     <ClInclude Include="Code\TestObject.h" />
-    <ClInclude Include="Code\TexturedQuad.h" />
+    <ClInclude Include="Code\Door.h" />
     <ClInclude Include="Code\Terrain.h" />
+    <ClInclude Include="Code\RainbowTerrain.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{CE3A8304-475E-425E-BA11-FDAA6293C905}</ProjectGuid>

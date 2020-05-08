@@ -8,9 +8,9 @@ class Terrain:
 {
 public:
 	Terrain(int width, int depth, const std::string& filename);
-	void alterTerrain(const std::string& heightMap);
-	GLfloat* colorPoint();
 	~Terrain() {};
+	void alterTerrain(Vertex** , const std::string& heightMap);
+	GLfloat* colorPoint();
 	GLint** createIndices();
 	GLfloat* normalise(GLfloat x, GLfloat y, GLfloat z);
 	GLfloat** createNormals();
@@ -26,8 +26,8 @@ public:
 	GLfloat* textureCoords;
 	const int size;
 	char* heightMap;
-private:
 	GLint texID;
+private:
 	void DrawTerrain();
 };
 

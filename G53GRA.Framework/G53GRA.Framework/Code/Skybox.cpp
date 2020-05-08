@@ -1,6 +1,7 @@
 #include "Skybox.h"
 
-Skybox::Skybox()
+Skybox::Skybox():
+	visible(true)
 {
 }
 
@@ -14,13 +15,15 @@ void Skybox::setTextures(GLuint* _texids)
 // define display function (to be called by MyScene)
 void Skybox::Display()
 {
-	glDisable(GL_LIGHTING);
-	glPushMatrix();
-	glTranslatef(0.f, -10.f, 0.f);
-	glScalef(1000.f, 1000.f, 1000.f);
-	drawSkybox();
-	glPopMatrix();
-	glEnable(GL_LIGHTING);
+	if (visible) {
+		glDisable(GL_LIGHTING);
+		glPushMatrix();
+		glTranslatef(0.f, -10.f, 0.f);
+		glScalef(1000.f, 1000.f, 1000.f);
+		drawSkybox();
+		glPopMatrix();
+		glEnable(GL_LIGHTING);
+	}
 }
 
 void Skybox::drawSkybox()

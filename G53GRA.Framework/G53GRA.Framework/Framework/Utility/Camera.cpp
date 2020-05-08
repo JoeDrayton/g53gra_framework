@@ -7,11 +7,17 @@ Camera::Camera() : wKey(0), sKey(0), aKey(0), dKey(0), currentButton(0), mouseX(
 	Reset();
 }
 
+void Camera::Teleport(float x, float y, float z) {
+	eyePosition[0] = x;
+	eyePosition[1] = y;
+	eyePosition[2] = z;
+}
+
 void Camera::Reset(){
 	// set the camera position to start at (0,0,0)
-	eyePosition[0] = 0.0f;
-	eyePosition[1] = 0.0f;
-	eyePosition[2] = 10.0f;
+	eyePosition[0] = -40.0f;
+	eyePosition[1] = -80.0f;
+	eyePosition[2] = 100.0f;
 		//0.5f * static_cast<float>(Scene::GetWindowHeight()) / static_cast<float>(tan(M_PI / 6.0));//0.0f;
 
 	// set the view direction vector of the camera to be (0,0,-1)
@@ -83,6 +89,10 @@ void Camera::Update(const double& deltaTime)
 			sub(eyePosition, forward, speed);
 	}
 	SetupCamera();
+}
+
+float* Camera::GetXYZ() {
+	return eyePosition;
 }
 
 void Camera::GetEyePosition(float &x, float &y, float &z) const

@@ -18,6 +18,7 @@ public:
 	~Skybox() { };                            // destructor
 	void setTextures(GLuint* _texids);
 	void Display();                         // overloaded virtual Display function
+	bool visible;
 private:
 	void drawSkybox();
 	bool toTexture;

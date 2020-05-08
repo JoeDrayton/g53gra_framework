@@ -2,25 +2,21 @@
 #include <iostream>
 #include <fstream>
 #include <assert.h>
+
 Terrain::Terrain(int width, int depth, const std::string& filename)
 	:width(width), depth(depth), size(width* (depth - 1) * 2)
 {
 	texID = Scene::GetTexture(filename);
 	vertices = createVertices();
 	indices = createIndices();
-	alterTerrain("./Textures/heightMap.bmp");
+	alterTerrain(vertices, "./Textures/heightMap.bmp");
 	//alterTerrain("./Textures/heightMap4x4.bmp");
 	colours = colorPoint();
 	normals = createNormals();
 	textureCoords = textureCoordinate();
-	/*textureCoords = new GLfloat[size * 6]{
-		1,0, 0,0, 1,0, 1,1, 1,0, 0,1,
-		1,0, 0,0, 1,0, 1,1, 1,0, 0,1,
-		1,0, 0,0, 1,0, 1,1, 1,0, 0,1
-	};*/
 }
 
-void Terrain::alterTerrain(const std::string& heightMap) {
+void Terrain::alterTerrain(Vertex** vertices, const std::string& heightMap) {
 	std::ifstream file(heightMap, std::ios::binary);
 	BITMAPFILEHEADER bmpHeader;
 	file.read(reinterpret_cast<char*>(&bmpHeader), sizeof(bmpHeader));
@@ -244,24 +240,34 @@ GLfloat** Terrain::createNormals()
 	}
 	return norms;
 }
-
+//0,0, 0,1, 1,0, 0,1, 1,0, 1,1,0,0, 1,1,
 GLfloat* Terrain::textureCoordinate() {
-	GLfloat* texCoords = new GLfloat[width * depth * 6];
+	GLfloat* texCoords = new GLfloat[width * depth * 8];
 	int j = 0;
 	for (int i = 0; i < width * depth; i++) {
 		if (i % 2 == 0) {
 			texCoords[j++] = 0;
 			texCoords[j++] = 0;
+
+			texCoords[j++] = 0;
+			texCoords[j++] = 1;
+
 			texCoords[j++] = 1;
 			texCoords[j++] = 0;
-			texCoords[j++] = 0;
-			texCoords[j++] = 1;
 		}
 		else {
-			texCoords[j++] = 1;
-			texCoords[j++] = 0;
 			texCoords[j++] = 0;
 			texCoords[j++] = 1;
+
+			texCoords[j++] = 1;
+			texCoords[j++] = 0;
+
+			texCoords[j++] = 1;
+			texCoords[j++] = 1;	
+			
+			texCoords[j++] = 0;	
+			texCoords[j++] = 0;	
+			
 			texCoords[j++] = 1;
 			texCoords[j++] = 1;
 		}
@@ -298,6 +304,7 @@ void Terrain::DrawTerrain() {
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_COLOR_MATERIAL);
 	glEnableClientState(GL_COLOR_ARRAY);
 	GLfloat* secretSauce = new GLfloat[width * depth * 3];
 	int i = 0;
@@ -306,15 +313,16 @@ void Terrain::DrawTerrain() {
 		secretSauce[i++] = vertices[j]->position[1];
 		secretSauce[i++] = vertices[j]->position[2];
 	}
-	glColorPointer(3, GL_FLOAT, 0, colours);
 	glNormalPointer(GL_FLOAT, 0, normals);
 	glVertexPointer(3, GL_FLOAT, 0, secretSauce);
+	glColorPointer(3, GL_FLOAT, 0, colours);
 	glBindTexture(GL_TEXTURE_2D, texID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 	glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
 	
-	glColor3f(0.5f, 0.3f, 0.15f);
+	//glColor3f(0.5f, 0.3f, 0.15f);
 	for (int j = 0; j < depth - 1; j++) {
 		glDrawElements(GL_TRIANGLE_STRIP, width * 2, GL_UNSIGNED_INT, indices[j]);
 	}

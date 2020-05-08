@@ -21,6 +21,7 @@ class Camera : public Input
 public:
 	/** Constructor for {@link Camera} to set up viewing properties in rendering window */
 	Camera();
+	void Teleport(float x, float y, float z);
 	virtual ~Camera(){};
 
 	// These functions can be called to get the position/view direction/camera axis of the camera in world space
@@ -35,6 +36,8 @@ public:
 	* @param deltaTime change in time since previous call (unused)
 	*/
 	virtual void Update(const double& deltaTime);
+
+	float* GetXYZ();
 
 	/**
 	* Resets {@link Camera} vectors to default values. Sets position of camera at (0,0) in x,y-plane

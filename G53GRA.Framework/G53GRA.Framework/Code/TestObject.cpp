@@ -7,18 +7,19 @@ TestObject::TestObject()
 // define display function (to be called by MyScene)
 void TestObject::Display()
 {
-	
+	/*
 	//ground
 	glPushMatrix();
-	glTranslatef(0.f, -2.f, 0.f);
+	glTranslatef(0.f, -80.f, 0.f);
 	glColor4f(1.0, 1.0, 0.0, 1.0); // yellow
 	box(200.f, 0.1f, 200.f);
 	glPopMatrix();
+	*/
 	
 
 	//zombie
 	glPushMatrix();
-	glTranslatef(0.f, 0.f, -15.f);
+	glTranslatef(0.f, -80.f, -15.f);
 	glColor4f(0.0, 1.0, 0.0, 1.0);
 	box(2.f, 4.f, 2.f);
 
