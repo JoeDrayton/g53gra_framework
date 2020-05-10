@@ -8,7 +8,7 @@ class RainbowTerrain :
 	public Animation
 {
 public:
-	RainbowTerrain(int width, int depth, const std::string& filename);
+	RainbowTerrain(int width, int depth);
 	void colourShift();
 	GLfloat* colorPoint();
 	void Update(const double& deltaTime);

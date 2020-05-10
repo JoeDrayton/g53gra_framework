@@ -1,13 +1,11 @@
 #include "RainbowTerrain.h"
 #include <cmath>
 
-RainbowTerrain::RainbowTerrain(int width, int depth, const std::string& filename)
-: Terrain::Terrain(width, depth, filename), width(width), depth(depth), size(width* (depth - 1) * 2)
+RainbowTerrain::RainbowTerrain(int width, int depth)
+: Terrain(width, depth), width(width), depth(depth), size(width* (depth - 1) * 2)
 {
-	std::cout << "Victory we have victory" << std::endl;
 	vertices = createVertices();
 	indices = createIndices();
-	//alterTerrain(vertices, "./Textures/heightMap.bmp");
 	colours = colorPoint();
 	theta = 0;
 }
@@ -28,7 +26,6 @@ void RainbowTerrain::colourShift() {
 		tempColour2 = front2;
 		tempColour3 = front3;
 	}
-	std::cout << std::endl;
 }
 
 GLfloat* RainbowTerrain::colorPoint() {
@@ -49,12 +46,15 @@ GLfloat* RainbowTerrain::colorPoint() {
 
 void RainbowTerrain::Update(const double& deltaTime)
 {	
+	if (fmod(deltaTime, 0.007) == 0) {
+		colourShift();
+	}
+
 	if (theta % 26 == 0) {
-	//if (fmod(deltaTime, 0.007) < 0.005) {
 		for (int i = 0; i < width * depth; i++) {
-				vertices[i]->position[0] += 1 * cos(theta);
+				vertices[i]->position[0] += 0.8 * cos(theta);
 				vertices[i]->position[1] += 0.005 * sin(theta);
-				vertices[i]->position[2] += 1 * cos(theta);
+				vertices[i]->position[2] += 0.8 * cos(theta);
 				theta++;
 		}
 	}

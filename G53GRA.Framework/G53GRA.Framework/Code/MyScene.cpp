@@ -68,7 +68,12 @@ void MyScene::Initialise()
 	spacebox = new GLuint[5];
 	eyeTextures = new GLuint[5];
 	terrain = new Terrain(100, 100, "./Textures/ground-texture.bmp");
-	rt = new RainbowTerrain(100, 100, "./Textures/rainbow-texture");
+	rt = new RainbowTerrain(100, 100);
+	eye[0] = new Eye(camera, 0.f, 40, 0.f, 0.f, -50.f, 100.f, -900.f);
+	eye[1] = new Eye(camera, 90.f, 0.f, 0.f, -49.f, -800.f, 100.f, 100.f);
+	eye[2] = new Eye(camera, 180.f, -40.f, 0.f, 0.f, -50.f, 100.f, 900.f);
+	eye[3] = new Eye(camera, 270.f, 0.f, 0.f, 49.f, 800, 100.f, 0.f);
+	eye[4] = new Eye(camera, 0, 90, 0, 0, 0, 300, 0);
 	door = new Door("./Textures/door-front.bmp", "./Textures/door-back.bmp", "./Textures/door-side.bmp","./Textures/portal.bmp", camera);
 	skybox[0] = Scene::GetTexture("./Textures/skybox-left.bmp");
 	skybox[1] = Scene::GetTexture("./Textures/skybox-right.bmp");
@@ -89,11 +94,6 @@ void MyScene::Initialise()
 	AddObjectToScene(sb);
 	AddObjectToScene(door);
 	AddObjectToScene(terrain);
-	eye[0] = new Eye(camera, 0.f, 40, 0.f, 0.f, -50.f, 100.f, -900.f);
-	eye[1] = new Eye(camera, 90.f, 0.f, 0.f, -49.f, -800.f, 100.f, 100.f);
-	eye[2] = new Eye(camera, 180.f, -40.f, 0.f, 0.f, -50.f, 100.f, 900.f);
-	eye[3] = new Eye(camera, 270.f, 0.f, 0.f, 49.f, 800, 100.f, 0.f);
-	eye[4] = new Eye(camera, 0, 90, 0, 0, 0, 300, 0);
 
 	eye[0]->setTextures(eyeTextures);
 	eye[1]->setTextures(eyeTextures);

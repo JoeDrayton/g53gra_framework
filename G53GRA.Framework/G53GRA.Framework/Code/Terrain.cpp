@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <assert.h>
-
 Terrain::Terrain(int width, int depth, const std::string& filename)
 	:width(width), depth(depth), size(width* (depth - 1) * 2)
 {
@@ -10,7 +9,6 @@ Terrain::Terrain(int width, int depth, const std::string& filename)
 	vertices = createVertices();
 	indices = createIndices();
 	alterTerrain(vertices, "./Textures/heightMap.bmp");
-	//alterTerrain("./Textures/heightMap4x4.bmp");
 	colours = colorPoint();
 	normals = createNormals();
 	textureCoords = textureCoordinate();
@@ -45,7 +43,6 @@ GLfloat* Terrain::colorPoint() {
 	int j = 0;
 	for (int i = 0; i < width * depth; i++) {
 		float vertexHeight = vertices[i]->position[1];
-		//std::cout << vertexHeight << std::endl;
 		if (vertexHeight <= 0.60) {
 			colorPoint[j++] = (float)89 / 255;
 			colorPoint[j++] = (float)68 / 255;
@@ -105,15 +102,12 @@ GLint** Terrain::createIndices() {
 			entry[i++] = row + (column * depth);
 			entry[i++] = row + ((column + 1) * depth);
 		}
-		//std::cout << "New entry " << j << " added!" << std::endl;
 		for (int k = 0; k < width * 2; k++) {
-			//std::cout << entry[k] << ", ";
 		}
 		i = 0;
 		indices[j++] = entry;
 		std::cout << std::endl;
 	}
-		//delete[] entry;
 	return indices;
 }
 GLfloat* Terrain::normalise(GLfloat x, GLfloat y, GLfloat z) {
@@ -135,7 +129,6 @@ GLfloat** Terrain::createNormals()
 			int numNeighbours = 0;
 			int index = column + (row * depth);
 			Vertex* current = vertices[index];
-			//std::cout << "Position: " << current->position[0] << ", " << current->position[1] << ", " << current->position[2] << std::endl;
 			Vertex* up = vertices[(column)+((row + 1) * depth)];
 			Vertex* right = vertices[(column + 1) + (row * depth)];
 			Vertex* downRight = vertices[(column + 1) + ((row - 1) * depth)];
@@ -153,7 +146,6 @@ GLfloat** Terrain::createNormals()
 				if (row == 0) {
 					N = right->crossProduct(up->position);
 					N = normalise(N[0],N[1],N[2]);
-					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
 				}
 				else if (row == (depth - 1)) {
 					N1 = down->crossProduct(downRight->position);
@@ -162,7 +154,6 @@ GLfloat** Terrain::createNormals()
 					N[1] = N1[1] + N2[1];
 					N[2] = N1[2] + N2[2];
 					N = normalise(N[0], N[1], N[2]);
-					//::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
 				}
 				else {
 					N1 = down->crossProduct(downRight->position);
@@ -172,7 +163,6 @@ GLfloat** Terrain::createNormals()
 					N[1] = N1[1] + N2[1] + N3[1];
 					N[2] = N1[2] + N2[2] + N3[2];
 					N = normalise(N[0], N[1], N[2]);
-					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
 				}
 			}
 			else if (column == (width - 1)) {
@@ -183,12 +173,10 @@ GLfloat** Terrain::createNormals()
 					N[1] = N1[1] + N2[1];
 					N[2] = N1[2] + N2[2];
 					N = normalise(N[0], N[1], N[2]);
-					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
 				}
 				else if (row == (depth - 1)) {
 					N = left->crossProduct(down->position);
 					N = normalise(N[0], N[1], N[2]);
-					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
 				}
 				else {
 					N1 = up->crossProduct(leftUp->position);
@@ -198,7 +186,6 @@ GLfloat** Terrain::createNormals()
 					N[1] = N1[1] + N2[1] + N3[1];
 					N[2] = N1[2] + N2[2] + N3[2];
 					N = normalise(N[0], N[1], N[2]);
-					//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
 				}
 			}
 			else if (row == 0) {
@@ -209,7 +196,6 @@ GLfloat** Terrain::createNormals()
 				N[1] = N1[1] + N2[1] + N3[1];
 				N[2] = N1[2] + N2[2] + N3[2];
 				N = normalise(N[0], N[1], N[2]);
-				//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
 			}
 			else if (row == (depth - 1)) {
 				N1 = left->crossProduct(down->position);
@@ -219,7 +205,6 @@ GLfloat** Terrain::createNormals()
 				N[1] = N1[1] + N2[1] + N3[1];
 				N[2] = N1[2] + N2[2] + N3[2];
 				N = normalise(N[0], N[1], N[2]);
-				//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
 			}
 			else {
 				N1 = up->crossProduct(leftUp->position);
@@ -233,14 +218,13 @@ GLfloat** Terrain::createNormals()
 				N[1] = N1[1] + N2[1] + N3[1] + N4[1] + N5[1] + N6[1];
 				N[2] = N1[2] + N2[2] + N3[2] + N4[2] + N5[2] + N6[2];
 				N = normalise(N[0], N[1], N[2]);
-				//std::cout << "Normal vector: " << N[0] << ", " << N[1] << ", " << N[2] << std::endl;
 			}
 			norms[i] = N;
 		}
 	}
 	return norms;
 }
-//0,0, 0,1, 1,0, 0,1, 1,0, 1,1,0,0, 1,1,
+
 GLfloat* Terrain::textureCoordinate() {
 	GLfloat* texCoords = new GLfloat[width * depth * 8];
 	int j = 0;
@@ -291,14 +275,12 @@ Vertex** Terrain::createVertices() {
 void Terrain::Display() {
 	glPushMatrix();
 	glTranslatef(-1000.f, -800, -1000.f);
-	//glTranslatef(-1000.f, -1000, -1000.f);
 	glScalef(2000.f / (width - 1), 1000.f, 2000.f / (depth - 1));
 	DrawTerrain();
 	glPopMatrix();
 }
 
 void Terrain::DrawTerrain() {
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -322,7 +304,6 @@ void Terrain::DrawTerrain() {
 
 	glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
 	
-	//glColor3f(0.5f, 0.3f, 0.15f);
 	for (int j = 0; j < depth - 1; j++) {
 		glDrawElements(GL_TRIANGLE_STRIP, width * 2, GL_UNSIGNED_INT, indices[j]);
 	}
@@ -332,5 +313,4 @@ void Terrain::DrawTerrain() {
 	glDisable(GL_LIGHTING);
 	glDisable(GL_TEXTURE_2D);
 	delete []secretSauce;
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

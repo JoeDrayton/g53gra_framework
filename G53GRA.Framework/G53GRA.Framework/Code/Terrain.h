@@ -7,6 +7,7 @@ class Terrain:
 	public DisplayableObject
 {
 public:
+	Terrain::Terrain(int width, int depth):width(width), depth(depth), size(width* (depth - 1) * 2) {};
 	Terrain(int width, int depth, const std::string& filename);
 	~Terrain() {};
 	void alterTerrain(Vertex** , const std::string& heightMap);
