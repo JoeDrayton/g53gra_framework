@@ -18,7 +18,7 @@ public:
 	float calculateDistance();
 
 private:
-	float angle, rotateX, rotateY, rotateZ, X, Y,Z, index;
+	float angle, rotateX, rotateY, rotateZ, X, Y, Z, index;
 	bool forward;
 	void DrawQuad();
 	Camera* camera;

@@ -93,13 +93,15 @@ void MyScene::Initialise()
 	sb->setTextures(skybox);
 	AddObjectToScene(sb);
 	AddObjectToScene(door);
-	AddObjectToScene(terrain);
+	//AddObjectToScene(terrain);
 
 	eye[0]->setTextures(eyeTextures);
 	eye[1]->setTextures(eyeTextures);
 	eye[2]->setTextures(eyeTextures);
 	eye[3]->setTextures(eyeTextures);
 	eye[4]->setTextures(eyeTextures);
+	Tractor* tractor = new Tractor();
+	AddObjectToScene(tractor);
 }
 
 void MyScene::Update(const double& deltaTime) {

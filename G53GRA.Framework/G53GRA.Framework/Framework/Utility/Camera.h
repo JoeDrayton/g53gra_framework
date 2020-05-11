@@ -108,7 +108,7 @@ private:
 	 * Member variable used to track when a key is pressed between frames
 	 * so that we can do an update in the Update() function rather than HandleKey
 	 * function to obtain smooth motion */
-	int wKey, sKey, aKey, dKey;
+	int wKey, sKey, aKey, dKey, space;
 
 	/** Current rendering window dimensions */
 	int windowWidth, windowHeight;

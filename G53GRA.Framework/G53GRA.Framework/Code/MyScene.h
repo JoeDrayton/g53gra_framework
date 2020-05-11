@@ -6,6 +6,9 @@
 #include "RainbowTerrain.h"
 #include "Door.h"
 #include "Eye.h"
+
+#include "Cylinder.h"
+#include "Tractor.h"
 #include <iostream>
 class MyScene :
 	public Scene

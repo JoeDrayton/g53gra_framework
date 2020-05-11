@@ -5,7 +5,6 @@ class Vertex
 {
 public:
 	Vertex(float x, float y, float z);
-	bool isEmpty();
 	~Vertex() {};
 	float position[3];
 	float color[3];
