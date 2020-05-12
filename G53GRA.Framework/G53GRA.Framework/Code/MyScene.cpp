@@ -9,22 +9,22 @@ MyScene::MyScene(int argc, char** argv, const char *title, const int& windowWidt
 GLfloat ambience[] = { 1.f, 1.f, 1.f, 1.0f };
 GLfloat diffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 GLfloat specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-GLfloat position[] = { -25, 100.f, -25.f, 0.f };
+GLfloat position[] = { -25, 100.f, -25.f, 1.f };
 //Light 1
-float ambient1[] = { 1.f, 0.f, 0.f, 1.f };
-float diffuse1[] = { 0.f, 0.f, 0.f, 1.f };
-float position1[] = { -15.f, 200.0f, 125, 1.0f };
+float ambient1[] = { 0.5f, 0.f, 0.f, 1.f };
+float diffuse1[] = { 1.f, 1.f, 0.5f, 1.f };
+float position1[] = { -400.f, -50, 400, 1.0f };
 //Light 2
-float ambient2[] = { 0.f, 0.f, 1.f, 1.f };
-float diffuse2[] = { 0.f, 0.f, 0.f, 1.f };
-float position2[] = { 15.f, 200.0f, 125.f, 1.0f };
+float ambient2[] = { 0.f, 0.f, 0.5f, 1.f };
+float diffuse2[] = { 0.5f, 1.f, 1.f, 1.f };
+float position2[] = { 400.f, -50, 400.f, 1.0f };
 //Light 3
 GLfloat ambience3[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 GLfloat diffuse3[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 GLfloat specular3[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 float position3[] = { -25.f, 100.0f, -25.f, 0.0f };
 
-float spot_direction[] = { 0.f, -1.f, -1.f };
+float spot_direction[] = { -1.f, -1.f, -0.5f };
 
 void MyScene::Initialise()
 {
@@ -37,21 +37,18 @@ void MyScene::Initialise()
 	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient1);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1);
 	glLightfv(GL_LIGHT1, GL_POSITION, position1);
-
-	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.9);
-
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.3);
 	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 30.f);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 70.f);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 0.f);
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 22.5f);
 
 	glLightfv(GL_LIGHT2, GL_AMBIENT, ambient2);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, diffuse2);
 	glLightfv(GL_LIGHT2, GL_POSITION, position2);
-	glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 0.9);
-
+	glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.f);
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
-	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 30.f);
-	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 70.f);
+	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 0.f);
+	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 22.5f);
 
 	glLightfv(GL_LIGHT3, GL_AMBIENT, ambience3);
 	glLightfv(GL_LIGHT3, GL_DIFFUSE, diffuse3);
@@ -93,7 +90,7 @@ void MyScene::Initialise()
 	sb->setTextures(skybox);
 	AddObjectToScene(sb);
 	AddObjectToScene(door);
-	//AddObjectToScene(terrain);
+	AddObjectToScene(terrain);
 
 	eye[0]->setTextures(eyeTextures);
 	eye[1]->setTextures(eyeTextures);
@@ -113,7 +110,7 @@ void MyScene::Update(const double& deltaTime) {
 		glDisable(GL_LIGHT0);
 		glEnable(GL_LIGHT1);
 		glEnable(GL_LIGHT2);
-		glEnable(GL_LIGHT3);
+		//glEnable(GL_LIGHT3);
 		sb->setTextures(spacebox);
 		door->visible = false;
 		AddObjectToScene(rt);

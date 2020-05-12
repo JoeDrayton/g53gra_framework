@@ -44,11 +44,13 @@ void Tractor::DrawTractor() {
 }
 
 void Tractor::Display() {
+	glEnable(GL_LIGHTING);
 	glPushMatrix();
 	glTranslatef(-50, -20, -200);
 	glScalef(10.0, 10.0, 10.0);
 	DrawTractor();
 	glPopMatrix();
+	glDisable(GL_LIGHTING);
 }
 
 void Tractor::DrawCube(
@@ -61,7 +63,17 @@ void Tractor::DrawCube(
 	GLfloat G0, GLfloat G1, GLfloat G2,
 	GLfloat H0, GLfloat H1, GLfloat H2,
 	GLint R, GLint G, GLint B) {
+	float mat_colour[]                      // colour reflected by diffuse light
+		= { 0.58f, 0.27f, 0.21f, 1.f };         // mid brown
+	float mat_ambient[]                     // ambient colour
+		= { 0.29f, 0.14f, 0.11f, 1.f };         // dark brown
+	float mat_spec[]                        // specular colour
+		= { 0.f, 0.f, 0.f, 1.f };               // no reflectance (black)
 
+	glPushAttrib(GL_ALL_ATTRIB_BITS);       // save current style attributes (inc. material properties)
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient); // set colour for ambient reflectance
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_colour);  // set colour for diffuse reflectance
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_spec);   // set colour for specular reflectance
 	GLfloat* vertices = new GLfloat[24]{
 		A0, A1, A2, //A
 		B0, B1, B2, //B
@@ -145,4 +157,5 @@ void Tractor::DrawCube(
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
 	}
+	glPopAttrib();
 }
