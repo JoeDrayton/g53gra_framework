@@ -5,61 +5,76 @@ MyScene::MyScene(int argc, char** argv, const char *title, const int& windowWidt
 {
 
 }
-//Light 0
-GLfloat ambience[] = { 1.f, 1.f, 1.f, 1.0f };
-GLfloat diffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-GLfloat specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-GLfloat position[] = { -25, 100.f, -25.f, 1.f };
+
+	//Light 0
+	GLfloat ambience[] = { 0.8f, 0.8f, 0.8f,1.f };
+	GLfloat diffuse[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	GLfloat specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	GLfloat position[] = { -500, 500, -300, 1.f };
 //Light 1
-float ambient1[] = { 0.5f, 0.f, 0.f, 1.f };
-float diffuse1[] = { 1.f, 1.f, 0.5f, 1.f };
-float position1[] = { -400.f, -50, 400, 1.0f };
+float ambient1[] = { 0.9f, 0.f, 0.f, 1.f };
+float diffuse1[] = { 0.7f, 0.1f, 0.5f, 1.f };
+GLfloat specular1[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+float position1[] = { 0.f, 500, 0, 1.0f };
 //Light 2
-float ambient2[] = { 0.f, 0.f, 0.5f, 1.f };
-float diffuse2[] = { 0.5f, 1.f, 1.f, 1.f };
-float position2[] = { 400.f, -50, 400.f, 1.0f };
+float ambient2[] = { 0.f, 0.f, 0.9f, 1.f };
+float diffuse2[] = { 0.5f, 0.1f, 1.f, 1.f };
+GLfloat specular2[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+float position2[] = { 0.f, 50, 0.f, 1.0f };
 //Light 3
 GLfloat ambience3[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 GLfloat diffuse3[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 GLfloat specular3[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 float position3[] = { -25.f, 100.0f, -25.f, 0.0f };
 
-float spot_direction[] = { -1.f, -1.f, -0.5f };
+float spot_direction[] = { 0.f, -1.f, 0.f };
 
 void MyScene::Initialise()
 {
 	glClearColor(0.1f, 0.0f, 0.0f, 1.0f);	
-	glLightfv(GL_LIGHT0, GL_AMBIENT, ambience);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
+	
 
 	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient1);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1);
-	glLightfv(GL_LIGHT1, GL_POSITION, position1);
-	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.3);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, specular1);
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.5f);
 	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, spot_direction);
-	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 0.f);
-	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 22.5f);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 4.f);
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 90.f);
+	glLightfv(GL_LIGHT1, GL_POSITION, position1 );
 
 	glLightfv(GL_LIGHT2, GL_AMBIENT, ambient2);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, diffuse2);
-	glLightfv(GL_LIGHT2, GL_POSITION, position2);
-	glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.f);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, specular2);
+	glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 0.5f);
 	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, spot_direction);
-	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 0.f);
-	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 22.5f);
+	glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 4.f);
+	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 90.f);
+	glLightfv(GL_LIGHT2, GL_POSITION, position2);
 
 	glLightfv(GL_LIGHT3, GL_AMBIENT, ambience3);
 	glLightfv(GL_LIGHT3, GL_DIFFUSE, diffuse3);
 	glLightfv(GL_LIGHT3, GL_SPECULAR, specular3);
 	glLightfv(GL_LIGHT3, GL_POSITION, position3);
-
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT1);
+	//glEnable(GL_LIGHT2);
 	glEnable(GL_NORMALIZE);
 
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT1);
+
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambience);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+	glLightfv(GL_LIGHT0, GL_POSITION, position);
+
+	
 	camera = this->GetCamera();
+	Eye* help = new Eye(camera, 0, 0, 0, 0, -500, 500, -300);
+	AddObjectToScene(help);
+
 	sb = new Skybox();
 	skybox = new GLuint[5];
 	spacebox = new GLuint[5];
@@ -92,16 +107,22 @@ void MyScene::Initialise()
 	AddObjectToScene(door);
 	AddObjectToScene(terrain);
 
+	help->setTextures(eyeTextures);
 	eye[0]->setTextures(eyeTextures);
 	eye[1]->setTextures(eyeTextures);
 	eye[2]->setTextures(eyeTextures);
 	eye[3]->setTextures(eyeTextures);
 	eye[4]->setTextures(eyeTextures);
-	Tractor* tractor = new Tractor();
-	AddObjectToScene(tractor);
+	//Tractor* tractor = new Tractor();
+	//AddObjectToScene(tractor);
 }
 
 void MyScene::Update(const double& deltaTime) {
+	position1[0] = 1;
+		position1[1] = 400;
+		position1[2] = 2;
+
+	glLightfv(GL_LIGHT1, GL_POSITION, position1);
 	Scene::Update(deltaTime);
 	float x = camera->GetXYZ()[0];
 	float z = camera->GetXYZ()[2];
@@ -110,7 +131,7 @@ void MyScene::Update(const double& deltaTime) {
 		glDisable(GL_LIGHT0);
 		glEnable(GL_LIGHT1);
 		glEnable(GL_LIGHT2);
-		//glEnable(GL_LIGHT3);
+		glEnable(GL_LIGHT3);
 		sb->setTextures(spacebox);
 		door->visible = false;
 		AddObjectToScene(rt);

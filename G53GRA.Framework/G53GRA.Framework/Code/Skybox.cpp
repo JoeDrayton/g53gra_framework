@@ -16,13 +16,13 @@ void Skybox::setTextures(GLuint* _texids)
 void Skybox::Display()
 {
 	if (visible) {
-		glDisable(GL_LIGHTING);
+		glEnable(GL_LIGHTING);
 		glPushMatrix();
 		glTranslatef(0.f, -10.f, 0.f);
 		glScalef(1000.f, 1000.f, 1000.f);
 		drawSkybox();
 		glPopMatrix();
-		glEnable(GL_LIGHTING);
+		glDisable(GL_LIGHTING);
 	}
 }
 

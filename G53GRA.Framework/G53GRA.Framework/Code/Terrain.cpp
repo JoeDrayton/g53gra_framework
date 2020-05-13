@@ -301,12 +301,24 @@ void Terrain::DrawTerrain() {
 	glBindTexture(GL_TEXTURE_2D, texID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	float mat_colour[]                      // colour reflected by diffuse light
+		= { 0.513f, 0.4274f, 0.34901f, 1.f };         // mid brown
+	float mat_ambient[]                     // ambient colour
+		= { 0.34901f, 0.26666f, 0.18823f };         // dark brown
+	float mat_spec[]                        // specular colour
+		= { 0.f, 0.f, 0.f, 1.f };               // no reflectance (black)
 
+	glPushAttrib(GL_ALL_ATTRIB_BITS);       // save current style attributes (inc. material properties)
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, mat_ambient); // set colour for ambient reflectance
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_colour);  // set colour for diffuse reflectance
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, mat_spec);   // set colour for specular reflectance
 	glTexCoordPointer(2, GL_FLOAT, 0, textureCoords);
 	
 	for (int j = 0; j < depth - 1; j++) {
 		glDrawElements(GL_TRIANGLE_STRIP, width * 2, GL_UNSIGNED_INT, indices[j]);
 	}
+	glBindTexture(GL_TEXTURE_2D, NULL);
+	glPopAttrib();
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
