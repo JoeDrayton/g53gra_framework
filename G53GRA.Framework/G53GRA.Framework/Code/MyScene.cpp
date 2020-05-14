@@ -32,8 +32,6 @@ float spot_direction[] = { 0.f, -1.f, 0.f };
 void MyScene::Initialise()
 {
 	glClearColor(0.1f, 0.0f, 0.0f, 1.0f);	
-	
-
 	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient1);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, specular1);
@@ -56,13 +54,11 @@ void MyScene::Initialise()
 	glLightfv(GL_LIGHT3, GL_DIFFUSE, diffuse3);
 	glLightfv(GL_LIGHT3, GL_SPECULAR, specular3);
 	glLightfv(GL_LIGHT3, GL_POSITION, position3);
-	//glEnable(GL_LIGHT1);
-	//glEnable(GL_LIGHT2);
 	glEnable(GL_NORMALIZE);
 
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHT0);
 
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambience);
@@ -72,8 +68,6 @@ void MyScene::Initialise()
 
 	
 	camera = this->GetCamera();
-	Eye* help = new Eye(camera, 0, 0, 0, 0, -500, 500, -300);
-	AddObjectToScene(help);
 
 	sb = new Skybox();
 	skybox = new GLuint[5];
@@ -107,14 +101,13 @@ void MyScene::Initialise()
 	AddObjectToScene(door);
 	AddObjectToScene(terrain);
 
-	help->setTextures(eyeTextures);
 	eye[0]->setTextures(eyeTextures);
 	eye[1]->setTextures(eyeTextures);
 	eye[2]->setTextures(eyeTextures);
 	eye[3]->setTextures(eyeTextures);
 	eye[4]->setTextures(eyeTextures);
-	//Tractor* tractor = new Tractor();
-	//AddObjectToScene(tractor);
+	tractor = new Tractor(-10, -90, 600);
+	AddObjectToScene(tractor);
 }
 
 void MyScene::Update(const double& deltaTime) {
@@ -128,6 +121,8 @@ void MyScene::Update(const double& deltaTime) {
 	float z = camera->GetXYZ()[2];
 	if (x > -50 && x < -35 && z > -50 && z < -35 && !spaceMode) {
 		spaceMode = true;
+		tractor->goTime = true;
+		tractor->resetRotation();
 		glDisable(GL_LIGHT0);
 		glEnable(GL_LIGHT1);
 		glEnable(GL_LIGHT2);

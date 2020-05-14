@@ -24,6 +24,7 @@ public:
 	Eye* eye[5];
 	Terrain* terrain;
 	RainbowTerrain* rt;
+	Tractor* tractor;
 	Door* door;
 private:
 	bool spaceMode;
